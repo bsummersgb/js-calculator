@@ -57,11 +57,11 @@ keys.addEventListener('click', event => {
                 previousKeyType !== 'operator'
             ) {
                 const calcValue = calculate(firstValue, operator, secondValue);
-                display.textContent = calcValue; console.log('calcValue before updating firstValue', calcValue);
+                display.textContent = calcValue;
 
               
                 // Update calculated value as firstValue
-                calculator.dataset.firstValue = calcValue; console.log('calcValue after updating firstValue', calcValue);
+                calculator.dataset.firstValue = calcValue;
               } else {
                 // If there are no calculations, set displayedNum as the firstValue
                 calculator.dataset.firstValue = displayedNumber;
