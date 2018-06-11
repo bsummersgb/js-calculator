@@ -24,7 +24,7 @@ const calculate = (n1, operator, n2) => {
 
 keys.addEventListener('click', event => {
     const key = event.target;
-    const action = key.dataset.action
+    const action = key.dataset.action;
     const displayedNumber = display.textContent;
     const keyContent = key.textContent;
 
@@ -47,16 +47,21 @@ keys.addEventListener('click', event => {
             action === 'multiply' ||
             action === 'divide'
         ) { 
-            const firstValue = calculator.dataset.firstValue
-            const operator = calculator.dataset.operator
-            const secondValue = displayedNumber
+            const firstValue = calculator.dataset.firstValue;
+            const operator = calculator.dataset.operator;
+            const secondValue = displayedNumber;
 
-            if (firstValue && operator && previousKeyType !== 'operator') {
-                const calcValue = calculate(firstValue, operator, secondValue)
-                display.textContent = calcValue
+            if (
+                firstValue && 
+                operator && 
+                previousKeyType !== 'operator'
+            ) {
+                const calcValue = calculate(firstValue, operator, secondValue);
+                display.textContent = calcValue; console.log('calcValue before updating firstValue', calcValue);
+
               
                 // Update calculated value as firstValue
-                calculator.dataset.firstValue = calcValue
+                calculator.dataset.firstValue = calcValue; console.log('calcValue after updating firstValue', calcValue);
               } else {
                 // If there are no calculations, set displayedNum as the firstValue
                 calculator.dataset.firstValue = displayedNumber;
@@ -64,9 +69,8 @@ keys.addEventListener('click', event => {
 
 
             key.classList.add('is-depressed');
-            calculator.dataset.firstValue = displayedNumber;
+            calculator.dataset.previousKeyType = 'operator';                        
             calculator.dataset.operator = action;
-            calculator.dataset.previousKeyType = 'operator';            
         }
         if (action === 'decimal') {
             if (display.textContent.indexOf('.') == -1) {
