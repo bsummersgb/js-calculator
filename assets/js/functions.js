@@ -34,7 +34,11 @@ keys.addEventListener('click', event => {
     if (key.matches('button')) {
         const previousKeyType = calculator.dataset.previousKeyType;
         if (!action) {
-            if (displayedNumber === '0' || previousKeyType === 'operator') {
+            if (
+                displayedNumber === '0' || 
+                previousKeyType === 'operator' ||
+                previousKeyType === 'calculate'
+            ) {
                 display.textContent = keyContent;
             } else {
                 display.textContent += keyContent;
@@ -54,7 +58,8 @@ keys.addEventListener('click', event => {
             if (
                 firstValue && 
                 operator && 
-                previousKeyType !== 'operator'
+                previousKeyType !== 'operator' &&
+                previousKeyType !== 'calculate'
             ) {
                 const calcValue = calculate(firstValue, operator, secondValue);
                 display.textContent = calcValue;
@@ -76,7 +81,7 @@ keys.addEventListener('click', event => {
             if (display.textContent.indexOf('.') == -1) {
                 display.textContent += '.';
             } 
-            if (previousKeyType === 'operator') {
+            if (previousKeyType === 'operator' || previousKeyType === 'calculate') {
                 display.textContent = '0.';
             } else {
                 return;
@@ -85,17 +90,36 @@ keys.addEventListener('click', event => {
             
         }
         if (action === 'calculate') { 
-            const firstValue = calculator.dataset.firstValue;
+            let firstValue = calculator.dataset.firstValue;
             const operator = calculator.dataset.operator;
-            const secondValue = displayedNumber;
+            let secondValue = displayedNumber;
             calculator.dataset.previousKeyType = 'equals';         
-
-            display.textContent = calculate(firstValue, operator, secondValue);
+            if (firstValue) {
+                if (previousKeyType === 'calculate') {
+                    firstValue = displayedNumber;
+                    secondValue = calculator.dataset.modifierValue;
+                }
+                display.textContent = calculate(firstValue, operator, secondValue);
+                calculator.dataset.modifierValue = secondValue;
+                calculator.dataset.previousKeyType = 'calculate'
+            }
 
         }
-        if (action === 'clear') { 
-            calculator.dataset.previousKeyType = 'clear';       
-            
+        if (action === 'clear') {
+            if (key.textContent === 'AC') {
+                calculator.dataset.firstValue = ''
+                calculator.dataset.modValue = ''
+                calculator.dataset.operator = ''
+                calculator.dataset.previousKeyType = ''
+            } else {
+                key.textContent = 'AC';            
+            }
+            display.textContent = "0";
+            calculator.dataset.previousKeyType = 'clear';             
+        }
+        if (action !== 'clear') {
+            const clearButton = calculator.querySelector('[data-action=clear]');
+            clearButton.textContent = 'CE'
         }
     }
 });
